@@ -11,55 +11,32 @@
 * 效果完成後，移除視覺效果
 
 
-## 基本佈局
+## 重點整理
 
-````` html 
-  <div class="keys">
-    <div data-key="65" class="key">
-      <kbd>A</kbd>
-      <span class="sound">clap</span>
-    </div>
-    <div data-key="83" class="key">
-      <kbd>S</kbd>
-      <span class="sound">hihat</span>
-    </div>
-    <div data-key="68" class="key">
-      <kbd>D</kbd>
-      <span class="sound">kick</span>
-    </div>
-    <div data-key="70" class="key">
-      <kbd>F</kbd>
-      <span class="sound">openhat</span>
-    </div>
-    <div data-key="71" class="key">
-      <kbd>G</kbd>
-      <span class="sound">boom</span>
-    </div>
-    <div data-key="72" class="key">
-      <kbd>H</kbd>
-      <span class="sound">ride</span>
-    </div>
-    <div data-key="74" class="key">
-      <kbd>J</kbd>
-      <span class="sound">snare</span>
-    </div>
-    <div data-key="75" class="key">
-      <kbd>K</kbd>
-      <span class="sound">tom</span>
-    </div>
-    <div data-key="76" class="key">
-      <kbd>L</kbd>
-      <span class="sound">tink</span>
-    </div>
-  </div>
+#### HTML 中的 data-* Attribute 屬性
+由於製作網頁的過程中，常會需要添加自定義的屬性，為了避免大家隨意的添加，因此HTML5中多了一個 `data-*`的屬性。
 
+位於`-`後面的`*`號可以遵循以下的規則來自定名稱的
+1.名字絕對不能以 xml 起頭，無論是否用於 xml。
+2.名字絕對不能包含大寫。
+3.名字絕對不能包含分號。
+
+頁面透過了`data-key`的值來判斷是否播放音檔及視覺效果
+`````html
   <audio data-key="65" src="sounds/clap.wav"></audio>
-  <audio data-key="83" src="sounds/hihat.wav"></audio>
-  <audio data-key="68" src="sounds/kick.wav"></audio>
-  <audio data-key="70" src="sounds/openhat.wav"></audio>
-  <audio data-key="71" src="sounds/boom.wav"></audio>
-  <audio data-key="72" src="sounds/ride.wav"></audio>
-  <audio data-key="74" src="sounds/snare.wav"></audio>
-  <audio data-key="75" src="sounds/tom.wav"></audio>
-  <audio data-key="76" src="sounds/tink.wav"></audio>
 `````
+
+
+#### keyCode 鍵盤代碼
+將`data-key`的值與按下按鍵後取得的keyCode判斷是否有相對應的物件。
+
+* keyCode查詢 - [http://keycode.info/](http://keycode.info/)
+
+#### 判斷
+
+
+
+
+
+
+
