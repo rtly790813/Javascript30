@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JS + CSS Clock</title>
+</head>
+<body>
+
+
+    <div class="clock">
+      <div class="clock-face">
+        <div class="hand hour-hand"></div>
+        <div class="hand min-hand"></div>
+        <div class="hand second-hand"></div>
+      </div>
+    </div>
+
+
+  <style>
+    html {
+      background:#018DED url(http://unsplash.it/1500/1000?image=881&blur=50);
+      background-size:cover;
+      font-family:'helvetica neue';
+      text-align: center;
+      font-size: 10px;
+    }
+
+    body {
+      margin: 0;
+      font-size: 2rem;
+      display:flex;
+      flex:1;
+      min-height: 100vh;
+      align-items: center;
+    }
+
+    .clock {
+      width: 30rem;
+      height: 30rem;
+      border:20px solid white;
+      border-radius:50%;
+      margin:50px auto;
+      position: relative;
+      padding:2rem;
+      box-shadow:
+        0 0 0 4px rgba(0,0,0,0.1),
+        inset 0 0 0 3px #EFEFEF,
+        inset 0 0 10px black,
+        0 0 10px rgba(0,0,0,0.2);
+    }
+
+    .clock-face {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform: translateY(-3px); /* account for the height of the clock hands */
+    }
+
+    .hand {
+      width:50%;
+      height:3px;
+      background:black;
+      position: absolute;
+      top:50%;
+      transform-origin: 100%;
+      transform: rotate(90deg);
+      transition: .2s;
+    }
+
+    .second-hand{
+      background: red;
+      height: 1px;
+    }
+
+  </style>
+
+  <script>
+    const secondHand = document.querySelector('.second-hand');
+    const minHand = document.querySelector('.min-hand');
+    const hourHand = document.querySelector('.hour-hand');
+
+    function setDate(){
+      const now = new Date(); // 取得現在時間
+
+      const sec = now.getSeconds(); // 取得秒數
+      const secondDegrees = ((sec/60)*360) + 90; // 計算秒數角度，+90為一開始的預設角度
+      secondHand.style.transform = `rotate(${secondDegrees}deg)`;
+
+      const min = now.getMinutes(); // 取得分鐘
+      const minDegrees = ((min/60)*360) + 90; // 計算分鐘角度 
+      minHand.style.transform = `rotate(${minDegrees}deg)`;
+
+      const hour = now.getHours(); // 取得小時
+      const hourDegrees = ((hour/12)*360) + 90; //計算小時角度，總共12小時，所以除以12
+      hourHand.style.transform = `rotate(${hourDegrees}deg)`;
+
+    }
+
+    setInterval(setDate,1000); // 每一秒鐘更新一次時間
+
+    setDate(); // 進入時的初始時間
+  </script>
+</body>
+</html>
