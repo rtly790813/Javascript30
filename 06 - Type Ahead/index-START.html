@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Type Ahead 👀</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <form class="search-form">
+    <input type="text" class="search" placeholder="City or State">
+    <ul class="suggestions">
+      <li>Filter for a city</li>
+      <li>or a state</li>
+    </ul>
+  </form>
+<script>
+const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+
+// fetch 是一個等同於 XMLHttpRequest 的概念，提供了許多與XMLHttpRequest相同的功能。
+// fetch 包括了Request , Response , Headers , Body 以及用於初始化異步請求的global fetch，而異步請求則是基於Promise。
+// Promise 是一個非同步操作執行後的結果，初始值為 pending ，最終結果將回傳 成功 (resolved) 或 失敗 (rejected)
+// Response 當 Prmoise 回傳結果為 resoloved ，會得到 Response 物件，可以直接以 .then() 的方式進行串接解析。
+// Response 可以利用.josn()，讀取Response，設為已讀，並且回傳被解析為JSON格式的promise物件。
+// 設為已讀的原因，是因為Response被設置為 stream 的方式，所以他們只能夠被讀取一次，當Response被解析過一次後，就無法在解析第二次了。
+const cities = [];
+const search = document.querySelector('.search');
+const suggestions =  document.querySelector('.suggestions');
+
+fetch(endpoint)
+  .then(res => res.json()) //取得 response 後將資料轉為json 並return
+  .then(data => cities.push(...data)); // 由於宣告 cities 是使用 const，因此不能第二次賦予值，所以利用push的方式將值丟進去[]中
+
+console.log(cities); // 在這只會看到空值，原因是因為 fetch 是一個非同步事件，因次在 fetch 完成之前就已經先 console 了
+
+// RegExp 正規表達式，用是於匹配字串中的組合模式， g 表示全局匹配，找到所有匹配，而不是在第一个匹配后停止，i 表示忽略大小寫，ignore case
+// match 會在字串內檢視是否有指定的值，可接收的參數為RegExp
+function matchDate(word,cities){
+  return cities.filter( city => {
+    // return city.city.match(/word/gi); -> 在match中的正規表達式無法直接帶入變數，會直接被當成字串，因此需要new一個正規表達式
+    const regex = new RegExp(word,'gi'); 
+    return city.city.match(regex); 
+  })
+}
+
+function displayMatchDate(e){
+  const matchCity = matchDate(this.value,cities);
+  console.log(matchCity);
+}
+
+search.addEventListener('change',displayMatchDate);
+search.addEventListener('keyup',displayMatchDate);
+
+</script>
+  </body>
+</html>
