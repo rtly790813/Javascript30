@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Array Cardio 💪💪</title>
+</head>
+<body>
+  <p><em>Psst: have a look at the JavaScript Console</em> 💁</p>
+  <script>
+    // ## Array Cardio Day 2
+
+    const people = [
+      { name: 'Wes', year: 1988 },
+      { name: 'Kait', year: 1986 },
+      { name: 'Irv', year: 1970 },
+      { name: 'Lux', year: 2015 }
+    ];
+
+    const comments = [
+      { text: 'Love this!', id: 523423 },
+      { text: 'Super good', id: 823423 },
+      { text: 'You are the best', id: 2039842 },
+      { text: 'Ramen is my fav food ever', id: 123523 },
+      { text: 'Nice Nice Nice!', id: 542328 }
+    ];
+
+    // Some and Every Checks
+    // Array.prototype.some() // is at least one person 19 or older?
+    // 是否至少有一個人滿19歲
+    // some() 可以檢查陣列中是否有符合條件的元素，會回傳的值為 true / false ，只要其中一個符合，就會回傳true
+    // const isAdult = people.some(person =>{
+    //   const Year = (new Date()).getFullYear();
+    //   if(Year - person.year >= 19){
+    //     return true;
+    //   }
+    // })
+
+    const isAdult = people.some(person => (new Date()).getFullYear() - person.year >= 19);
+    console.log({isAdult});
+
+    // Array.prototype.every() // is everyone 19 or older?
+    // 是否每一個人都滿19歲
+    // every() 與 some() 相似，但是必須要所有元素都符合條件才會回傳true
+    const everyomeAdult = people.every(person => (new Date()).getFullYear() - person.year >= 19);
+    console.log({everyomeAdult});
+
+    // Array.prototype.find()
+    // Find is like filter, but instead returns just the one you are looking for
+    // find the comment with the ID of 823423
+    // 尋找是否有ID=823423的評論
+    // find() 會回傳一個值，並且是回傳第一個遇到true的值，若後面也有符合條件的，則不會再回傳。
+    const isComment = comments.find(comment => comment.id === 823423);
+    console.log(isComment);
+
+    // Array.prototype.findIndex()
+    // Find the comment with this ID
+    // 找到ID=823423的評論序號
+    // delete the comment with the ID of 823423
+    // 刪除ID=823423的評論
+
+    const commentIndex = comments.findIndex(comment => comment.id === 823423);
+    console.log(commentIndex);
+
+    // 第一種方式->將原本陣列中的移除
+    // splice(index, count) 將指定項目從陣列中移除，並回傳移除的項目，第一個參數是指定移除的index,第二個參數為從index後要移除幾個元素
+    // comments.splice(commentIndex,1);
+    // console.table(comments);
+
+    // 第二種方式->創一個新的陣列
+    // slice(index1 , index2) 第一個參數為指定開始的index,第二個參數為終止的index，並且不包含第二個index的內容，若沒有指定第二個參數則會接續到陣列結束
+    // 而原本的陣列並不會被修改
+    const newComments = [
+      ...comments.slice(0,commentIndex),
+      ...comments.slice(commentIndex+1)
+    ];
+    console.table(newComments);
+
+  </script>
+</body>
+</html>
