@@ -43,9 +43,24 @@ function matchDate(word,cities){
   })
 }
 
+// join() 將Array轉換成字串元素並且用指定的分隔符號或字串分隔，若沒有指定預設為逗號
+// replace() 會回傳一個新字串，舊字串中含有指定字串時，該字串替換成另一段文字，第一個的參數是指定字串可以是字串或是RegExp，第二個參數則是被更換的參數可以是字串或著函式
+// str.replace(substr/regexp,newString/function)
 function displayMatchDate(e){
   const matchCity = matchDate(this.value,cities);
-  console.log(matchCity);
+  // console.log(matchCity);
+  const html = matchCity.map(place => {
+    const regex = new RegExp(this.value,'gi');
+    const cityName = place.city.replace(regex,`<span class="hl">${this.value}</span>`); // 將input中輸入的字串作為指定更換的參數，就可以將該指定的部分替換成加入height light的span tag
+    const stateName = place.state.replace(regex,`<span class="hl">${this.value}</span>`)
+    console.log(`${cityName} ${stateName}`);
+    return `
+     <li>
+      <span class="name">${cityName} , ${stateName}</span>
+      <span class="population">${place.population}</span>
+     </li>`;
+  }).join(''); // 將陣列轉換成字串並使用空白作為分隔
+  suggestions.innerHTML = html;
 }
 
 search.addEventListener('change',displayMatchDate);
