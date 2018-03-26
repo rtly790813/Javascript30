@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Console Tricks!</title>
+</head>
+<body>
+
+  <p onClick="makeGreen()" class="word">×BREAK×DOWN×</p>
+
+  <script>
+    const dogs = [{ name: 'Snickers', age: 2 }, { name: 'hugo', age: 8 }];
+
+    function makeGreen() {
+      const p = document.querySelector('p');
+      p.style.color = '#BADA55';
+      p.style.fontSize = '50px';
+    }
+
+    // Regular
+    //一般的console.log
+    console.log('Hello');
+
+    // Interpolated
+    // %s 可以帶入指定的參數
+    console.log('My name is %s','Yang');
+
+    // Styled
+    // %c 後的內容皆可以帶入style
+    console.log(' %c The Style','font-size:48px; color:red; background:#aaa; padding-right:30px; ');
+
+    // warning!
+    console.warn('This is warn');
+
+    // Error :|
+    console.error('This is error');
+
+    // Info
+    console.info('Crocodiles eat 3-4 people per year');
+
+    // Testing
+    // 判斷內容是true 還是 false，當結果為false就會出現帶入參數的訊息，true 則不會顯示任何消息
+    console.assert(1>10 , '你數學沒學好?');
+    console.assert(1<10 , '這才是正常的！')
+
+    // clearing
+    // 清除以上所有的 console 訊息
+    // console.clear();
+
+    // Viewing DOM Elements
+    // 可以顯示所選取物件的所有屬性，一般log只會回傳物件本身的內容，dir則會顯示內容屬性。
+    let word = document.querySelector('.word');
+    console.log(word);
+    console.dir(word);
+    
+    // Grouping together
+    // 可以利用 groupCollapsed 及 groupEnd 來把資訊群組起來
+    dogs.forEach(dog => {
+      console.groupCollapsed(dog.name);
+      console.log(`Dog name is ${dog.name}`);
+      console.log(`${dog.name} is ${dog.age} years old`);
+      console.groupEnd(dog.name);
+    })
+
+    // counting
+    // 相同物件出現的次數進行累加
+    console.count('1');
+    console.count('2');
+    console.count('1');
+    console.count('1');
+    console.count('1');
+    console.count('2');
+    console.count('1');
+    console.count('2');
+
+
+    // timing
+
+    console.time('多少時間');
+    fetch('https://api.github.com/users/wesbos')
+      .then(response => response.json())
+      .then(data => {
+        console.timeEnd('多少時間')
+        console.log(data);
+      })
+
+  </script>
+</body>
+</html>
