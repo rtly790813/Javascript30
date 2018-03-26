@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HTML5 Canvas</title>
+</head>
+<body>
+<canvas id="draw" width="800" height="800"></canvas>
+<script>
+
+  // getContext() 可以返回一個canvas的對象，提供用於該對象的繪圖方法和屬性 常見的屬性 2D / webgl / webgl2 (後面兩者為3D)
+  // 當設定的屬性為2D時，會得到一個 CanvasRenderingContext2D 提供的 2D 渲染背景用来绘制，就可以繪製2D物件
+  // beginPath() 開始一條路徑，或是重置一條路徑
+  // moveTo() 路徑的起始點，是創建一個點，而非一條線條
+  // lineTo() 添加一個新的點
+  // stroke() 通過 moveTo 和 lineTo 來定義路徑，並且繪製線條
+  // strokeStyle 回傳一個筆刷的顏色 / 漸層 / 樣式
+  // lineWidth 設定筆刷的寬度
+  // lineJoin 當兩條線條交會時，交界處顯示的形狀 bevel(斜角)/round(圓角)/miter(尖角預設)
+  // lineCap 設定線條末端的顯示的形狀 butt(預設平直邊緣)/round(圓角)/square(方形)
+  const canvas = document.getElementById('draw');
+
+  //定義 ID = draw 為 2D的繪圖區
+  const ctx = canvas.getContext('2d');
+
+  // 定義畫布的大小
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  // 畫筆的初始樣式
+  ctx.strokeStyle = '#55aacc';
+  ctx.lineWidth = 1;
+  ctx.lineJoin = 'miter';
+  ctx.lineCap = 'round';
+
+  let isDrawing = false;
+  let lastX = 0;
+  let lastY = 0;
+  let hsl = 0;
+  let direction = true;
+
+
+  function startDrawing(e){
+    if(!isDrawing) return;
+    ctx.strokeStyle = `hsla(${hsl},100%,50%)`; // 利用 hsl ++ 讓筆刷的顏色動態更新
+    ctx.beginPath(); 
+    ctx.moveTo(lastX,lastY); // 設定每一次筆刷的起始點
+    ctx.lineTo(e.offsetX,e.offsetY); //新增的位置
+    ctx.stroke();
+
+    [lastX,lastY] = [e.offsetX,e.offsetY];  // 更改滑鼠每一次滑動的位置
+
+    hsl ++; 
+    if(hsl > 360) { // 避免hsl無上限增長
+      hsl = 0;
+    }
+
+    if(ctx.lineWidth >= 50 || ctx.lineWidth <= 1 ){
+      direction = !direction; // 當寬度>=50 或 <= 1 就會改變一次 direction 的 boolean 值
+    }
+    
+    // 利用改變 boolean 值，適時改變筆刷要加大還是縮小
+    if(direction){
+      ctx.lineWidth ++;
+    }else{
+      ctx.lineWidth --;
+    }
+    
+  }
+
+  canvas.addEventListener('mousedown',e => {
+    isDrawing = true;
+    [lastX,lastY] = [e.offsetX,e.offsetY]; // 當滑鼠再次點擊時，更新滑鼠的位置
+  });
+  canvas.addEventListener('mousemove',startDrawing);  
+  canvas.addEventListener('mouseup',() => isDrawing = false);
+</script>
+
+<style>
+  html, body {
+    margin:0;
+  }
+</style>
+
+</body>
+</html>
