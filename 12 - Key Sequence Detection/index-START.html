@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Key Detection</title>
+  <script type="text/javascript" src="https://www.cornify.com/js/cornify.js"></script>
+</head>
+<body>
+<script>
+  const pressed = [];
+  const password = 'lucyyy';
+
+  window.addEventListener('keyup', (e) => {
+    // 取得鍵盤key入的值，放進陣列中
+    pressed.push(e.key);
+    // 當key入的長度超過密碼長度，最前面的字移除
+    // 當第一個參數為負數時，會從最後一個值開始算起，-1等於最後一個值依序往前推，參數為負數的密碼長度在-1時，表示要減掉最前面多餘的值
+    // 第二個參數則是陣列長度減掉密碼長度，當值為負數則不移除任何值
+    pressed.splice(-password.length-1,pressed.length-password.length);
+    console.log(pressed);
+
+    // 將key入的陣列，轉換成字串，並且確認是否有包含password的字串，皆相同的話才會跳出小馬兒
+    if(pressed.join('').includes(password)){
+      console.log('Ding Ding');
+      cornify_add();
+    }
+  })
+</script>
+</body>
+</html>
