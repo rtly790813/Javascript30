@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JS Reference VS Copy</title>
+</head>
+<body>
+
+  <script>
+    // start with strings, numbers and booleans
+    // 當值為型別 strings / numbers / booleans 的時候，當b = a 時， b 是 copy a 的值，表示這時候另一方任意改變直接不會影響到彼此。
+    let num = 1;
+    let num2 = num;
+    console.log(num, num2); // 1 1
+    num = 2;
+    console.log(num, num2); // 1 2 
+
+    let str = 'lucy';
+    let str2 = str;
+    console.log(str, str2); // lucy lucy
+    str = 'lucy yang';
+    console.log(str, str2); // lucy ynag lucy
+
+    let boo = true;
+    let boo2 = boo;
+    console.log(boo,boo2); // true true
+    boo = false;
+    console.log(boo,boo2); // false true
+
+    // Let's say we have an array
+    // 當值為物件或是特殊物件(如function)時，則是傳參考，也就是，當 b = a 陣列時，b 並不會複製一份陣列，而是指向與 a 同樣的一個記憶位置，所以當其中一方是改變內容的值(利用子節點改變內容的值)，雙方都會互相影響。
+    // 若是將變數重新設定一個新的物件，也就是假設 a 重新賦予一個物件，表示賦予了一個新的記憶位置，雙方就不再互相影響了。
+    const players = ['Wes', 'Sarah', 'Ryan', 'Poppy'];
+
+    // and we want to make a copy of it.
+    const team = players;
+    // console.log(players, team); // ['Wes', 'Sarah', 'Ryan', 'Poppy'] , ['Wes', 'Sarah', 'Ryan', 'Poppy']
+
+    // You might think we can just do something like this:
+    team[3] = 'Luke';
+    // console.log(players, team); // ['Wes', 'Sarah', 'Ryan', 'Luke'] , ['Wes', 'Sarah', 'Ryan', 'Luke']
+
+    // however what happens when we update that array?
+
+    // now here is the problem!
+
+    // oh no - we have edited the original array too!
+
+    // Why? It's because that is an array reference, not an array copy. They both point to the same array!
+
+    // So, how do we fix this? We take a copy instead!
+    // 解決這個問題，我們可以利用其他方式複製，例如使用slice
+    // slice(begin,end) 原本的陣列選擇起始值(begin)到結束值(end)複製出一個新的陣列，而原本的陣列將不會被修改。
+    const team2 = players.slice();
+    // console.log(players,team2);  // ['Wes', 'Sarah', 'Ryan', 'Luke'] , ['Wes', 'Sarah', 'Ryan', 'Luke']
+    players[0] = 'Lucy';
+    // console.log(players,team2);  // ['Lucy', 'Sarah', 'Ryan', 'Luke'] , ['Wes', 'Sarah', 'Ryan', 'Luke']
+
+    // one way
+
+    // or create a new array and concat the old one in
+    // newArr = oldArr.concat(valus); 用來合併2個或多個以上的陣列，該方法並不會影響到原有陣列，回傳一個包含本身陣列值得新陣列
+    const team3 = players.concat();
+    // console.log(players,team3); // ["Lucy", "Sarah", "Ryan", "Luke"],["Lucy", "Sarah", "Ryan", "Luke"]
+    players[2] = 'Doris';
+    // console.log(players,team3); // ["Lucy", "Sarah", "Doris", "Luke"],["Lucy", "Sarah", "Ryan", "Luke"]
+
+    // or use the new ES6 Spread
+    const team4 = [...players];
+    console.log(players,team4); // ["Lucy", "Sarah", "Doris", "Luke"],["Lucy", "Sarah", "Doris", "Luke"];
+    team4[3] = 'wooo';
+    console.log(players,team4); // ["Lucy", "Sarah", "Doris", "Luke"],["Lucy", "Sarah", "Doris", "wooo"];
+    
+    // Array.from() 會從array-like或是可迭代的物件，建立一個新的Array實體。
+    const team5 = Array.from(players);
+    console.log(players, team5); // ["Lucy", "Sarah", "Doris", "Luke"],["Lucy", "Sarah", "Doris", "Luke"];
+    team5[0] = 'cool';
+    console.log(players, team5); // ["Lucy", "Sarah", "Doris", "Luke"],["cool", "Sarah", "Doris", "Luke"];
+
+    // now when we update it, the original one isn't changed
+    
+
+    // The same thing goes for objects, let's say we have a person object
+
+    // with Objects
+    const person = {
+      name: 'Wes Bos',
+      age: 80
+    };
+
+    // and think we make a copy:
+
+    // how do we take a copy instead?
+
+    // We will hopefully soon see the object ...spread
+
+    // Things to note - this is only 1 level deep - both for Arrays and Objects. lodash has a cloneDeep method, but you should think twice before using it.
+
+  </script>
+
+</body>
+</html>
