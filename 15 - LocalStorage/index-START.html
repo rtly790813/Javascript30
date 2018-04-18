@@ -62,9 +62,26 @@
     }).join('');
   };
 
+  // matches() 會回傳一格boolen值，來確認是否符合內容，()則是css選取器
+  function toggleCheck(e){
+    if (!e.target.matches('input')) return ;
+    const element = e.target;
+    const index = element.dataset.index;
+    items[index].check = !items[index].check;
+    localStorage.setItem('items',JSON.stringify(items));
+  }
+
+  // function toggleDone (e){
+  //   console.log(this.dataset.index);
+  // }
+
   populateList(items,itemsList);
 
   addItems.addEventListener('submit',addItem);
+  // 由於使用input來進行SelectorAll的話會連同輸入欄位的input一併被列入，所以是利用UL才能選擇到僅包含checkbox的input
+  // const inputList = document.querySelectorAll('input');
+  // inputList.forEach(input => input.addEventListener('click',toggleDone));
+  itemsList.addEventListener('click',toggleCheck);
   
 </script>
 
