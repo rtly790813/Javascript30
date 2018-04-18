@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mouse Shadow</title>
+</head>
+<body>
+
+  <div class="hero">
+    <h1 contenteditable>🔥WOAH!</h1>
+  </div>
+
+  <style>
+  html {
+    color:black;
+    font-family: sans-serif;
+  }
+
+  body {
+    margin: 0;
+  }
+
+  .hero {
+    min-height: 100vh;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    color:black;
+  }
+
+  h1 {
+    text-shadow: 10px 10px 0 rgba(0,0,0,1);
+    font-size: 100px;
+    /* 解決方式二 */
+    pointer-events: none;
+  }
+  </style>
+
+<script>
+  const hero = document.querySelector('.hero');
+  const text = hero.querySelector('h1');
+  const walk = 150;
+  // 設定偏移量
+
+  // 物件解構賦值 ( object destructuring ）是一個 javascript 表達式，可以將物件或是陣列中的值，賦予給不同的變數。
+  // ============================================================================================ //
+  // let sayHi = {
+  //   greet:'Hello',
+  //   greetings:'Bonjou'
+  // }
+
+  // let {greet:Hey , greetings:Yo } = sayHi;
+  // 相當於 let Hey = sayHi.greet 及 let Yo = sayHi.greetings ;
+  // Hey = Hello , Yo = Bonjou
+  // ============================================================================================ //
+
+  // offsetWidth / offsetHeight = 當前元素的寬度/高度，包含了content / padding / border ，不含margin 
+  // offsetLeft / offsetTop = 當前元素到父層邊界的值
+  function shadow(e){
+    // width = hero.offsetWidth , height = hero.offsetHeight
+    const { offsetWidth : width, offsetHeight : height} = hero ;
+    // x = e.offsetX , y = e.offsetY
+    let { offsetX : x , offsetY : y } = e ;
+
+    // 當滑鼠在 .hero 這個元素上移動，由於包含了 h1，子層的Z軸會高於父層，因此滑鼠滑過 h1 時，element 就會指向到 h1 而非 .hero
+    // 解決方式一
+    // 所以可以利用判斷式來判別滑鼠移動到的物件如果非 .hero 時，計算該物件到父層的距離 + 滑鼠在該物件上的距離 = 滑鼠在父層上的位置
+    // 解決方式二 
+    // 在 h1 元素上下 css pointer-events : none ， 此使當滑鼠滑過就會直接穿透到父層，而不會去計算 h1 物件本身
+    // if(this !== e.target){
+    //   x = x + e.target.offsetLeft ;
+    //   y = y + e.target.offsetTop ;
+    // }
+
+    const xWalk = Math.round((x / width * walk) - (walk / 2));
+    const yWalk = Math.round((y / height * walk) - (walk / 2));
+
+    text.style.textShadow = `
+      ${xWalk}px ${yWalk}px 0 rgba(160,0,200,.5),
+      ${yWalk}px ${xWalk-1}px 0 rgba(160,160,0,.5)
+    `;
+  }
+
+  hero.addEventListener('mousemove', shadow);
+
+</script>
+</body>
+</html>
