@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>👀👀👀Follow Along Nav</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav>
+      <ul class="menu">
+        <li><a href="">Home</a></li>
+        <li><a href="">Order Status</a></li>
+        <li><a href="">Tweets</a></li>
+        <li><a href="">Read Our History</a></li>
+        <li><a href="">Contact Us</a></li>
+      </ul>
+    </nav>
+
+    <div class="wrapper">
+      <p>Lorem ipsum dolor sit amet, <a href="">consectetur</a> adipisicing elit. Est <a href="">explicabo</a> unde natus necessitatibus esse obcaecati distinctio, aut itaque, qui vitae!</p>
+      <p>Aspernatur sapiente quae sint <a href="">soluta</a> modi, atque praesentium laborum pariatur earum <a href="">quaerat</a> cupiditate consequuntur facilis ullam dignissimos, aperiam quam veniam.</p>
+      <p>Cum ipsam quod, incidunt sit ex <a href="">tempore</a> placeat maxime <a href="">corrupti</a> possimus <a href="">veritatis</a> ipsum fugit recusandae est doloremque? Hic, <a href="">quibusdam</a>, nulla.</p>
+      <p>Esse quibusdam, ad, ducimus cupiditate <a href="">nulla</a>, quae magni odit <a href="">totam</a> ut consequatur eveniet sunt quam provident sapiente dicta neque quod.</p>
+      <p>Aliquam <a href="">dicta</a> sequi culpa fugiat <a href="">consequuntur</a> pariatur optio ad minima, maxime <a href="">odio</a>, distinctio magni impedit tempore enim repellendus <a href="">repudiandae</a> quas!</p>
+    </div>
+
+  <script>
+    const links = document.querySelectorAll('a');
+    // create 一個 span 物件，預設 display none，避免初始的過場效果
+    const hightLight = document.createElement('span');
+    hightLight.classList.add('highlight');
+    hightLight.style.display = 'none';
+    document.body.append(hightLight);
+    
+    // getBoundingClientRect() 可以取得物件的相對於“視窗“的位置及寬高
+    function hiehgline (){
+      const elementPos = this.getBoundingClientRect();
+      
+      // 由於使用 getBoundingClientRect 物件的位置會是與視窗的相對位置，而非頁面的相對位置，這會導致滑動頁面之後，X 與 Y 座標的不準確。
+      // 因此 X / Y 軸必須加上 scroll 頁面的高度
+      const coord = {
+        width: elementPos.width,
+        height: elementPos.height,
+        left: elementPos.left + window.scrollX,
+        top: elementPos.top + window.scrollY
+      }
+
+      hightLight.style.width = `${coord.width}px`;
+      hightLight.style.height = `${coord.height}px`;
+      hightLight.style.left = `${coord.left}px`;
+      hightLight.style.top = `${coord.top}px`;
+      hightLight.style.display = 'inline';
+    }
+
+    links.forEach(link => link.addEventListener('mouseover', hiehgline));
+  </script>
+</body>
+</html>
+
