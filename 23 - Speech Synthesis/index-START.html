@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Speech Synthesis</title>
+  <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="voiceinator">
+
+      <h1>The Voiceinator 5000</h1>
+
+      <select name="voice" id="voices">
+        <option value="">Select A Voice</option>
+      </select>
+
+      <label for="rate">Rate:</label>
+      <input name="rate" type="range" min="0" max="3" value="1" step="0.1">
+
+      <label for="pitch">Pitch:</label>
+
+      <input name="pitch" type="range" min="0" max="2" step="0.1">
+      <textarea name="text">Hello! I love JavaScript 👍</textarea>
+      <button id="stop">Stop!</button>
+      <button id="speak">Speak</button>
+
+    </div>
+
+<script>
+  // SpeechSynthesisUtterance() 可以透過驅動瀏覽器說話的 API 
+  // 可以設定的屬性有 lang / pitch / rate / text / voice / volume
+  // lang - 設定說話的語言 , pitch - 設定說話的音頻 , 
+  // rate - 設定說話的速率 , text - 設定說話的內容 , 
+  // voice - 設定說話的聲音 , volume - 設定說話的音量
+
+  // 操縱 SpeechSynthesisUtterance 的方式使用 speechSynthesis，他可以取得 SpeechSynthesisUtterance 的訊息，處理播放暫停等...方法。
+  // speechSynthesis 可設定的屬性有 cancel / getVoices / pause / resume / speak ，
+  // cancel - 移除語音談話對列中的所有對話 , 
+  // getVoices - 回傳當前設備中所有可以使用的聲音列表 , 
+  // pause - 將對話暫停 , 
+  // resume - 設定成為一個非暫停的狀態，如果已經暫停了就會繼續播放 , 
+  // speak - 將對話加入到語音談話列隊中
+
+  const msg = new SpeechSynthesisUtterance();
+  let voices = [];
+  const voicesDropdown = document.querySelector('[name="voice"]');
+  const options = document.querySelectorAll('[type="range"], [name="text"]');
+  const speakButton = document.querySelector('#speak');
+  const stopButton = document.querySelector('#stop');
+
+  // 設定語音要講的文字從哪裡取得
+  msg.text = document.querySelector('[name="text"]').value;
+
+  // 匯入語音功能中的語言選單
+  function fillVoices(){
+    // 取得當前設備的所有聲音列表
+    voices = this.getVoices();
+    // console.log(voices);
+    // 將列表加入到 Dropdown 中
+    voicesDropdown.innerHTML = voices
+      .map( voice => `<option value="${voice.name}"> ${voice.name}  - ${voice.lang}</option>`)
+      .join('');
+  }
+
+  // 選擇語言後將語言設置
+  function setVoice(){
+    //console.log(this.value);
+    // 取得當前 select 中選定的語言並與 voices 清單進行核對且設置到 SpeechSynthesisUtterance 中
+    msg.voice = voices.find(voice => voice.name === this.value);
+    toggleVoice();
+  }
+
+  function toggleVoice( speak = true){
+    speechSynthesis.cancel();
+    // 當點擊 cancel 時，會傳入 false 參數，讓 speak 功能不被觸發。
+    if(speak){
+      speechSynthesis.speak(msg);
+    }
+  }
+
+  // 取得 option 中的內容，並更新 SpeechSynthesisUtterance 的值
+  function setOption(){
+    // console.log(this.name , this.value);
+    msg[this.name] = this.value;
+  }
+
+speechSynthesis.addEventListener('voiceschanged', fillVoices);
+voicesDropdown.addEventListener('change', setVoice);
+options.forEach(option => option.addEventListener('change', setOption));
+speakButton.addEventListener('click', toggleVoice);
+
+// 由於事件監聽中放入的 function 是必須事件被執行後才會被執行，function 不能夠寫入 ()，這會導致 function 會被立刻執行。
+// 因此為了要帶入參數，可以使用 bind 帶入參數、用箭頭函式來帶入參數或用 function 包住
+// bind(thisArg, arg); 是會創建一個新的函式，並不會直接被執行，被呼叫時 function 的 this 會等於第一個參數的 this
+stopButton.addEventListener('click', toggleVoice.bind(null, false));
+// stopButton.addEventListener('click', () => toggleVoice(false));
+// stopButton.addEventListener('click', function(){
+//   toggleVoice(false);
+// });
+</script>
+
+</body>
+</html>
